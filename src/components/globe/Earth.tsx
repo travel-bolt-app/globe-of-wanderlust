@@ -127,7 +127,7 @@ const Earth: React.FC<EarthProps> = ({ selectedDestination, isSpinning, onSpinCo
         <meshStandardMaterial 
           map={mapTexture} 
           bumpMap={bumpTexture} 
-          bumpScale={0.05}
+          bumpScale={0.1}
           metalness={0.1}
           roughness={0.8}
         />
@@ -156,11 +156,16 @@ const Earth: React.FC<EarthProps> = ({ selectedDestination, isSpinning, onSpinCo
       )}
       
       {/* Lighting */}
-      <ambientLight intensity={0.3} />
+      <ambientLight intensity={0.2} />
       <directionalLight 
-        position={[5, 3, 5]} 
-        intensity={0.8} 
+        position={[3, 2, 5]}
+        intensity={0.7}
         castShadow 
+      />
+      <directionalLight
+        position={[-2, 0, -5]}
+        intensity={0.2}
+        color="#ADD8E6"
       />
     </>
   );
