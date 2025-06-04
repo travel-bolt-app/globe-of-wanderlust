@@ -1,4 +1,3 @@
-
 import * as THREE from 'three';
 
 // Convert lat/long to 3D coordinates
@@ -14,35 +13,46 @@ export function latLongToVector3(lat: number, lon: number, radius: number): THRE
 }
 
 // Create a starfield background
-export function createStarfield(count: number = 2000): THREE.Points {
+export function createStarfield(count: number = 5000): THREE.Points { // Default count increased
   const vertices = [];
-  
+  const colors = []; // Array for colors
+  const color = new THREE.Color(); // THREE.Color instance
+
   for (let i = 0; i < count; i++) {
-    // Create stars in a sphere around the scene
-    const x = THREE.MathUtils.randFloatSpread(100);
-    const y = THREE.MathUtils.randFloatSpread(100);
-    const z = THREE.MathUtils.randFloatSpread(100);
+    const x = THREE.MathUtils.randFloatSpread(200); // Increased spread
+    const y = THREE.MathUtils.randFloatSpread(200); // Increased spread
+    const z = THREE.MathUtils.randFloatSpread(200); // Increased spread
     vertices.push(x, y, z);
+
+    // Add subtle color variations
+    if (Math.random() > 0.7) {
+      color.setHSL(Math.random() * 0.1 + 0.5, 0.8, Math.random() * 0.25 + 0.75); // Bluish tints
+    } else if (Math.random() > 0.5) {
+      color.setHSL(Math.random() * 0.1 + 0.05, 0.8, Math.random() * 0.25 + 0.75); // Yellowish/Orangish tints
+    } else {
+      color.setRGB(1.0, 1.0, 1.0); // White
+    }
+    colors.push(color.r, color.g, color.b);
   }
-  
+
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-  
-  // Create stars with varying sizes for more realistic appearance
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3)); // Set color attribute
+
   const sizes = [];
   for (let i = 0; i < count; i++) {
     sizes.push(Math.random() * 2.0);
   }
   geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
-  
+
   const material = new THREE.PointsMaterial({
-    color: 0xFFFFFF,
-    size: 0.2,
+    size: 0.15, // Adjusted size
     transparent: true,
     opacity: 0.8,
-    sizeAttenuation: true
+    sizeAttenuation: true,
+    vertexColors: true // Enable vertex colors
   });
-  
+
   return new THREE.Points(geometry, material);
 }
 
